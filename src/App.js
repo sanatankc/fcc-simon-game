@@ -117,17 +117,22 @@ class App extends Component {
       this.setState({clickIsAllowed: true})
       return 0
     }
-    this.gainNode.gain.value = 1
-    this.gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + 1)
+    this.gainNode.gain.value = 0.5
+    // this.gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + 1)
     const cardToGlow = cardsToGlow[0]
     const glowingCards = im.insert(cardsFalseState, cardToGlow, true)
-
-    this.setState({cardGlow: glowingCards}, () => {
-      cardsToGlow.shift()
-      this.setState({ cardsToGlow },() => {
-        setTimeout(this.glowCards.bind(this), 1000)
+    cardsToGlow.shift()
+    this.setState({
+      cardGlow: glowingCards,
+      cardsToGlow
+    }, () => {
+        setTimeout(() => {
+          this.setState({cardGlow: cardsFalseState}, () => {
+            this.gainNode.gain.value = 0
+            setTimeout(this.glowCards.bind(this), 200)
+          })
+        },1000)
       })
-    })
   }
 
   handleStart(e) {
@@ -163,11 +168,27 @@ class App extends Component {
       this.setState(prevState => ({
         cardGlow: cardsFalseState,
         shouldHandleMouseLeave: false,
-        userCards: im.push(prevState.userCards, cardIndex)
-      }))
+        userCards: im.push(prevState.userCards, +cardIndex)
+      }), () => this.validateCards(this.state.userCards))
     }
   }
 
+  validateCards(cards) {
+    console.log(cards)
+    const allElementsEqual = cards.every((card, i) => (
+      this.state.gameState[i] === card
+    ))
+    const isSameLength = this.state.gameState.length === cards.length
+    if (allElementsEqual && isSameLength) {
+      console.log('You WON!!')
+      this.setState({userCards: []})
+      setTimeout(this.handleStart.bind(this), 500)
+    } else if (allElementsEqual && !isSameLength) {
+      console.log('Game is Still Running!!!')
+    } else {
+      console.log('Game Over!')
+    }
+  }
 
   handleCardLeave(e) {
     if (this.state.shouldHandleMouseLeave) {
