@@ -11,4 +11,7 @@ const remove = (arr, index) => {
   return cpArr
 }
 
-export default {insert, remove}
+const push = (arr, item) => {
+  return [...arr, item]
+}
+export default {insert, remove, push}

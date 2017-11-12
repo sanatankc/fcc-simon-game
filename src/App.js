@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
 import im from './im'
-import shade from './shadeColor'
-console.log(im)
-const boxShadow3d = (offset, color) => {
-  let css = ''
-  for (let i = 1; i < offset + 1; i++) {
-    css += `${i}px ${i}px 0px ${color}${(offset !== i) ? ', ' : ''}`
-  }
-  return css
-}
+
+// const boxShadow3d = (offset, color) => {
+//   let css = ''
+//   for (let i = 1; i < offset + 1; i++) {
+//     css += `${i}px ${i}px 0px ${color}${(offset !== i) ? ', ' : ''}`
+//   }
+//   return css
+// }
 
 const flexCenter = css`
   display: flex;
@@ -69,34 +68,34 @@ const InnerMask = styled.div`
 const Container = styled.div`
   ${flexCenter}
   flex-direction: column;
-  background: dodgerblue;
 `
 const ControlsContainer = styled.div`
   ${flexCenter}
   width: 100vw;
   height: 100px;
-  background: papayawhip;
 `
 const ButtonsContainer = styled.div`
   ${flexCenter}
   justify-content: space-between;
-  background: palevioletred;
   width: 200px;
   height: 100%;
 `
 
 
-
+const cardsFalseState = [false, false, false, false]
 class App extends Component {
   state = {
-    cardsToGlow: [0, 3, 1, 2],
+    gameState: [],
+    userCards: [],
+    cardsToGlow: [],
     cardGlow: [false, false, false, false],
-    canClick: false,
     cardColor: ['#F7B267', '#E74C3C', '#246A73', '#3498DB'],
+    clickIsAllowed: false,
+    shouldHandleMouseLeave: false,
   }
+
   componentDidMount() {
-    // this.initSound()
-    this.glowCards()
+    this.initSound()
   }
 
   initSound() {
@@ -110,16 +109,18 @@ class App extends Component {
     this.oscillator.frequency.value = 110
     this.gainNode.gain.value = 0
   }
+
   glowCards() {
     const { cardsToGlow } = this.state
-    // this.gainNode.gain.value = 1
-    // this.gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + 1)
     if (cardsToGlow.length === 0) {
-      this.setState({cardGlow: [false, false, false, false]})
+      this.setState({cardGlow: cardsFalseState})
+      this.setState({clickIsAllowed: true})
       return 0
     }
+    this.gainNode.gain.value = 1
+    this.gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + 1)
     const cardToGlow = cardsToGlow[0]
-    const glowingCards = im.insert([false, false, false, false], cardToGlow, true)
+    const glowingCards = im.insert(cardsFalseState, cardToGlow, true)
 
     this.setState({cardGlow: glowingCards}, () => {
       cardsToGlow.shift()
@@ -130,27 +131,74 @@ class App extends Component {
   }
 
   handleStart(e) {
-    console.log(e)
+    const gameState = im.push(this.state.gameState, Math.floor(Math.random() * 4))
+    this.setState({
+      gameState,
+      cardsToGlow: [...gameState]
+    }, () => {
+        this.glowCards()
+      })
   }
+
   handleStrict(e) {
     console.log(e)
   }
-  render() {
 
+  handleCardDown(e) {
+    e.preventDefault()
+    if (this.state.clickIsAllowed) {
+      const glowingCards = im.insert(cardsFalseState, e.target.dataset.key, true)
+      this.setState({cardGlow: glowingCards})
+      this.setState({shouldHandleMouseLeave: true})
+      this.gainNode.gain.value = 0.5
+    } else {
+      return 0
+    }
+  }
+
+  handleCardUp(e) {
+    if (this.state.clickIsAllowed) {
+      this.gainNode.gain.value = 0
+      this.setState({cardGlow: cardsFalseState})
+      this.setState({shouldHandleMouseLeave: false})
+      // this.
+    }
+  }
+
+  validateCards() {
+
+  }
+
+  handleCardLeave(e) {
+    if (this.state.shouldHandleMouseLeave) {
+      this.handleCardUp()
+    }
+
+  }
+
+  render() {
     return (
       <Main>
         <Container>
           <MainCircle>
             <Mask>
               {this.state.cardColor.map((color, i) =>
-                <Card color={color} key={i} shouldGlow={this.state.cardGlow[i]} />
+                <Card
+                  color={color}
+                  key={i}
+                  shouldGlow={this.state.cardGlow[i]}
+                  data-key={i}
+                  onMouseDown={this.handleCardDown.bind(this)}
+                  onMouseUp={this.handleCardUp.bind(this)}
+                  onMouseLeave={this.handleCardLeave.bind(this)}
+                />
               )}
             </Mask>
             <InnerMask />
           </MainCircle>
           <ControlsContainer>
             <ButtonsContainer>
-              <button onClick={this.handleStart}>Start</button>
+              <button onClick={() => this.handleStart()}>Start</button>
               <button onClick={this.handleStrict}>Strict</button>
             </ButtonsContainer>
           </ControlsContainer>
