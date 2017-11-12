@@ -133,7 +133,7 @@ class App extends Component {
   handleStart(e) {
     const gameState = im.push(this.state.gameState, Math.floor(Math.random() * 4))
     this.setState({
-      gameState,
+      gameState: [...gameState],
       cardsToGlow: [...gameState]
     }, () => {
         this.glowCards()
@@ -158,20 +158,20 @@ class App extends Component {
 
   handleCardUp(e) {
     if (this.state.clickIsAllowed) {
+      const cardIndex = e.target.dataset.key
       this.gainNode.gain.value = 0
-      this.setState({cardGlow: cardsFalseState})
-      this.setState({shouldHandleMouseLeave: false})
-      // this.
+      this.setState(prevState => ({
+        cardGlow: cardsFalseState,
+        shouldHandleMouseLeave: false,
+        userCards: im.push(prevState.userCards, cardIndex)
+      }))
     }
   }
 
-  validateCards() {
-
-  }
 
   handleCardLeave(e) {
     if (this.state.shouldHandleMouseLeave) {
-      this.handleCardUp()
+      this.handleCardUp(e)
     }
 
   }
