@@ -94,6 +94,8 @@ class App extends Component {
     shouldHandleMouseLeave: false,
   }
 
+  freq = [329.63,261.63,220,164.81]
+
   componentDidMount() {
     this.initSound()
   }
@@ -102,11 +104,10 @@ class App extends Component {
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
     this.oscillator = this.audioCtx.createOscillator()
     this.gainNode = this.audioCtx.createGain()
-    this.oscillator.type = 'triangle'
+    this.oscillator.type = 'sine'
     this.oscillator.connect(this.gainNode)
     this.gainNode.connect(this.audioCtx.destination)
     this.oscillator.start(0)
-    this.oscillator.frequency.value = 110
     this.gainNode.gain.value = 0
   }
 
@@ -117,9 +118,9 @@ class App extends Component {
       this.setState({clickIsAllowed: true})
       return 0
     }
-    this.gainNode.gain.value = 0.5
-    // this.gainNode.gain.exponentialRampToValueAtTime(0.00001, this.audioCtx.currentTime + 1)
     const cardToGlow = cardsToGlow[0]
+    this.oscillator.frequency.value = this.freq[cardToGlow]
+    this.gainNode.gain.value = 0.5
     const glowingCards = im.insert(cardsFalseState, cardToGlow, true)
     cardsToGlow.shift()
     this.setState({
@@ -131,7 +132,7 @@ class App extends Component {
             this.gainNode.gain.value = 0
             setTimeout(this.glowCards.bind(this), 200)
           })
-        },1000)
+        },500)
       })
   }
 
@@ -153,8 +154,11 @@ class App extends Component {
     e.preventDefault()
     if (this.state.clickIsAllowed) {
       const glowingCards = im.insert(cardsFalseState, e.target.dataset.key, true)
-      this.setState({cardGlow: glowingCards})
-      this.setState({shouldHandleMouseLeave: true})
+      this.setState({
+        cardGlow: glowingCards,
+        shouldHandleMouseLeave: true
+      })
+      this.oscillator.frequency.value = e.target.dataset.freq
       this.gainNode.gain.value = 0.5
     } else {
       return 0
@@ -209,6 +213,7 @@ class App extends Component {
                   key={i}
                   shouldGlow={this.state.cardGlow[i]}
                   data-key={i}
+                  data-freq = {this.freq[i]}
                   onMouseDown={this.handleCardDown.bind(this)}
                   onMouseUp={this.handleCardUp.bind(this)}
                   onMouseLeave={this.handleCardLeave.bind(this)}
