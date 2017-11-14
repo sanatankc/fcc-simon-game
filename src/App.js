@@ -173,7 +173,7 @@ class App extends Component {
           <ControlsContainer>
             <ButtonsContainer>
               <StartButton onClick={() => this.handleStart([Math.floor(Math.random() * 4)])} />
-              <button onClick={this.handleStrict}>Strict</button>
+              {/* <button onClick={this.handleStrict}>Strict</button> */}
             </ButtonsContainer>
           </ControlsContainer>
         </Container>
