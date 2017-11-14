@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import im from './im'
-import Sound from './sound'
+import im from './utils/im'
+import Sound from './utils/sound'
 import {
   Main,
   MainCircle,
