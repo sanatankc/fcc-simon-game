@@ -148,6 +148,7 @@ class App extends Component {
   }
 
   handleStart(gameState) {
+    console.log('LOSER!!!')
     this.setState({
       gameState: [...gameState],
       cardsToGlow: [...gameState]
@@ -212,10 +213,11 @@ class App extends Component {
   }
 
   onLose() {
+    console.log(this)
     this.setState({
       userCards: []
     }, () => {
-      setTimeout(this.handleStart([...this.state.gameState]).bind(this), 500)
+      setTimeout(() => this.handleStart([...this.state.gameState]), 500)
     })
   }
 
