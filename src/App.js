@@ -92,6 +92,7 @@ class App extends Component {
     cardColor: ['#F7B267', '#E74C3C', '#246A73', '#3498DB'],
     clickIsAllowed: false,
     shouldHandleMouseLeave: false,
+    level: 1,
   }
 
   freq = [329.63,261.63,220,164.81]
@@ -185,8 +186,13 @@ class App extends Component {
     const isSameLength = this.state.gameState.length === cards.length
     if (allElementsEqual && isSameLength) {
       console.log('You WON!!')
-      this.setState({userCards: []})
-      setTimeout(this.handleStart.bind(this), 500)
+      this.setState(prevState => ({
+        userCards: [],
+        level: prevState.level + 1
+      }), () => {
+        console.log(this.state.level)
+        setTimeout(this.handleStart.bind(this), 500)
+      })
     } else if (allElementsEqual && !isSameLength) {
       console.log('Game is Still Running!!!')
     } else {
