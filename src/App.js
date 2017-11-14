@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import im from './utils/im'
 import Sound from './utils/sound'
+import StartButton from './components/StartButton'
+
 import {
   Main,
   MainCircle,
@@ -170,7 +172,7 @@ class App extends Component {
           </MainCircle>
           <ControlsContainer>
             <ButtonsContainer>
-              <button onClick={() => this.handleStart([Math.floor(Math.random() * 4)])}>Start</button>
+              <StartButton onClick={() => this.handleStart([Math.floor(Math.random() * 4)])} />
               <button onClick={this.handleStrict}>Strict</button>
             </ButtonsContainer>
           </ControlsContainer>
