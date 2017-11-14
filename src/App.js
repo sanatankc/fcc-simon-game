@@ -59,11 +59,13 @@ const Card = styled.div`
 `
 
 const InnerMask = styled.div`
+  ${flexCenter}
   width: 37.5%;
   height: 37.5%;
   position: absolute;
   background: #ECF0F1;
   border-radius: 50%;
+  text-align: center;
 `
 const Container = styled.div`
   ${flexCenter}
@@ -80,7 +82,9 @@ const ButtonsContainer = styled.div`
   width: 200px;
   height: 100%;
 `
-
+const LevelCount = styled.div`
+  font-size: 36px;
+`
 
 const cardsFalseState = [false, false, false, false]
 class App extends Component {
@@ -226,7 +230,12 @@ class App extends Component {
                 />
               )}
             </Mask>
-            <InnerMask />
+            <InnerMask>
+              <div>
+                <p>Level</p>
+                <LevelCount>{this.state.level}</LevelCount>
+              </div>
+            </InnerMask>
           </MainCircle>
           <ControlsContainer>
             <ButtonsContainer>
