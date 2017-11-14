@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import im from './utils/im'
 import Sound from './utils/sound'
 import StartButton from './components/StartButton'
-
+import StrictButton from './components/StrictButton'
 import {
   Main,
   MainCircle,
@@ -65,7 +65,6 @@ class App extends Component {
   }
 
   handleStart(gameState) {
-    console.log('LOSER!!!')
     this.setState({
       gameState: [...gameState],
       cardsToGlow: [...gameState]
@@ -173,7 +172,7 @@ class App extends Component {
           <ControlsContainer>
             <ButtonsContainer>
               <StartButton onClick={() => this.handleStart([Math.floor(Math.random() * 4)])} />
-              {/* <button onClick={this.handleStrict}>Strict</button> */}
+              <StrictButton onClick={this.handleStrict}>Strict</StrictButton>
             </ButtonsContainer>
           </ControlsContainer>
         </Container>

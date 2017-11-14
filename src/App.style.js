@@ -78,7 +78,7 @@ export const ControlsContainer = styled.div`
 export const ButtonsContainer = styled.div`
   ${flexCenter}
   justify-content: space-between;
-  width: 200px;
+  width: 300px;
   height: 100%;
 `
 

@@ -2,19 +2,19 @@ import React, { Component } from 'react'
 import isPressed from './isPressedHOC'
 import Button from './Button.style'
 
-class StartButton extends Component {
+class StrictButton extends Component {
   state = {
-    isEverClicked: false,
+    buttonState: 0
   }
 
   render() {
     return (
       <Button isPressed={this.props.isPressed} onClick={() => {
-        !this.state.isEverClicked && this.setState({isEverClicked: true})
         this.props.onClick()
-      }}>{this.state.isEverClicked ? 'Restart' : 'Start'}</Button>
+        this.setState(({buttonState}) => ({buttonState: +!buttonState}))
+      }}>{this.state.buttonState ? 'Strict' : 'Easy'}</Button>
     )
   }
 }
 
-export default isPressed(StartButton)
+export default isPressed(StrictButton)
