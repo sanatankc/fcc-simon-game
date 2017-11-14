@@ -105,6 +105,12 @@ class App extends Component {
     this.initSound()
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.gameState.length !== prevState.level) {
+      this.setState({level: this.state.gameState.length})
+    }
+  }
+
   initSound() {
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
     this.oscillator = this.audioCtx.createOscillator()
@@ -141,8 +147,7 @@ class App extends Component {
       })
   }
 
-  handleStart(e) {
-    const gameState = im.push(this.state.gameState, Math.floor(Math.random() * 4))
+  handleStart(gameState) {
     this.setState({
       gameState: [...gameState],
       cardsToGlow: [...gameState]
@@ -188,20 +193,30 @@ class App extends Component {
       this.state.gameState[i] === card
     ))
     const isSameLength = this.state.gameState.length === cards.length
+
     if (allElementsEqual && isSameLength) {
-      console.log('You WON!!')
-      this.setState(prevState => ({
-        userCards: [],
-        level: prevState.level + 1
-      }), () => {
-        console.log(this.state.level)
-        setTimeout(this.handleStart.bind(this), 500)
-      })
+      this.onWin()
     } else if (allElementsEqual && !isSameLength) {
       console.log('Game is Still Running!!!')
     } else {
-      console.log('Game Over!')
+      this.onLose()
     }
+  }
+
+  onWin() {
+    this.setState(prevState => ({
+      userCards: [],
+    }), () => {
+      setTimeout(() => this.handleStart([...this.state.gameState, Math.floor(Math.random() * 4)]), 500)
+    })
+  }
+
+  onLose() {
+    this.setState({
+      userCards: []
+    }, () => {
+      setTimeout(this.handleStart([...this.state.gameState]).bind(this), 500)
+    })
   }
 
   handleCardLeave(e) {
@@ -239,7 +254,7 @@ class App extends Component {
           </MainCircle>
           <ControlsContainer>
             <ButtonsContainer>
-              <button onClick={() => this.handleStart()}>Start</button>
+              <button onClick={() => this.handleStart([Math.floor(Math.random() * 4)])}>Start</button>
               <button onClick={this.handleStrict}>Strict</button>
             </ButtonsContainer>
           </ControlsContainer>
