@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
 import im from './im'
+import Sound from './sound'
 
 // const boxShadow3d = (offset, color) => {
 //   let css = ''
@@ -102,24 +103,13 @@ class App extends Component {
   freq = [329.63,261.63,220,164.81]
 
   componentDidMount() {
-    this.initSound()
+    this.sound = new Sound()
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.gameState.length !== prevState.level) {
       this.setState({level: this.state.gameState.length})
     }
-  }
-
-  initSound() {
-    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-    this.oscillator = this.audioCtx.createOscillator()
-    this.gainNode = this.audioCtx.createGain()
-    this.oscillator.type = 'sine'
-    this.oscillator.connect(this.gainNode)
-    this.gainNode.connect(this.audioCtx.destination)
-    this.oscillator.start(0)
-    this.gainNode.gain.value = 0
   }
 
   glowCards() {
@@ -130,8 +120,7 @@ class App extends Component {
       return 0
     }
     const cardToGlow = cardsToGlow[0]
-    this.oscillator.frequency.value = this.freq[cardToGlow]
-    this.gainNode.gain.value = 0.5
+    this.sound.play(this.freq[cardToGlow])
     const glowingCards = im.insert(cardsFalseState, cardToGlow, true)
     cardsToGlow.shift()
     this.setState({
@@ -140,7 +129,7 @@ class App extends Component {
     }, () => {
         setTimeout(() => {
           this.setState({cardGlow: cardsFalseState}, () => {
-            this.gainNode.gain.value = 0
+            this.sound.pause()
             setTimeout(this.glowCards.bind(this), 200)
           })
         },500)
@@ -169,8 +158,7 @@ class App extends Component {
         cardGlow: glowingCards,
         shouldHandleMouseLeave: true
       })
-      this.oscillator.frequency.value = e.target.dataset.freq
-      this.gainNode.gain.value = 0.5
+      this.sound.play(e.target.dataset.freq)
     } else {
       return 0
     }
@@ -179,7 +167,7 @@ class App extends Component {
   handleCardUp(e) {
     if (this.state.clickIsAllowed) {
       const cardIndex = e.target.dataset.key
-      this.gainNode.gain.value = 0
+      this.sound.pause()
       this.setState(prevState => ({
         cardGlow: cardsFalseState,
         shouldHandleMouseLeave: false,
