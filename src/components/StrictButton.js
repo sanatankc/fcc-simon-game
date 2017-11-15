@@ -15,19 +15,12 @@ const StyledButton = Button.extend.attrs({
 `
 
 class StrictButton extends Component {
-  state = {
-    strict: false
-  }
-
   render() {
     return (
       <StyledButton
         isPressed={this.props.isPressed}
-        strict={this.state.strict}
-        onClick={() => {
-          this.props.onClick()
-          this.setState(({strict}) => ({strict: !strict}))
-      }}>{!this.state.strict ? 'Strict' : 'Easy'}</StyledButton>
+        onClick={this.props.onClick}
+      >{!this.props.strict ? 'Strict' : 'Easy'}</StyledButton>
     )
   }
 }

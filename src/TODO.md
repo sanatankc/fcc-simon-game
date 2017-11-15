@@ -1,6 +1,5 @@
 # Todo
 
-* Implement Game over
-* Create Buttons Good looking
-* Refactor Sound class in a different class
-* Implement Strict
++ Create Buttons Good looking
++ Implement Strict
+* Fix Bug

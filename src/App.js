@@ -37,7 +37,9 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.gameState.length !== prevState.level) {
-      this.setState({level: this.state.gameState.length})
+      if (prevState.gameState.length !== 0) {
+        this.setState({level: this.state.gameState.length})
+      }
     }
   }
 
@@ -75,8 +77,10 @@ class App extends Component {
   }
 
   handleStrict(e) {
-    console.log(e)
-  }
+    this.setState(prevState => ({
+      strict: !prevState.strict
+    })
+  )}
 
   handleCardDown(e) {
     e.preventDefault()
@@ -144,7 +148,6 @@ class App extends Component {
     if (this.state.shouldHandleMouseLeave) {
       this.handleCardUp(e)
     }
-
   }
 
   reset() {
@@ -186,7 +189,10 @@ class App extends Component {
           <ControlsContainer>
             <ButtonsContainer>
               <StartButton onClick={this.reset.bind(this)} />
-              <StrictButton onClick={this.handleStrict.bind(this)}>Strict</StrictButton>
+              <StrictButton
+                onClick={this.handleStrict.bind(this)}
+                strict={this.state.strict}
+              >Strict</StrictButton>
             </ButtonsContainer>
           </ControlsContainer>
         </Container>
