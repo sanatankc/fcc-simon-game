@@ -143,6 +143,15 @@ class App extends Component {
 
   }
 
+  reset() {
+    this.setState({
+      gameState: [],
+      cardsToGlow: [],
+      userCards: []
+    })
+    this.handleStart([Math.floor(Math.random() * 4)])
+  }
+
   render() {
     return (
       <Main>
@@ -171,8 +180,8 @@ class App extends Component {
           </MainCircle>
           <ControlsContainer>
             <ButtonsContainer>
-              <StartButton onClick={() => this.handleStart([Math.floor(Math.random() * 4)])} />
-              <StrictButton onClick={this.handleStrict}>Strict</StrictButton>
+              <StartButton onClick={this.reset.bind(this)} />
+              <StrictButton onClick={this.handleStrict.bind(this)}>Strict</StrictButton>
             </ButtonsContainer>
           </ControlsContainer>
         </Container>

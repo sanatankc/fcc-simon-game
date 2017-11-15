@@ -1,18 +1,30 @@
 import React, { Component } from 'react'
 import isPressed from './isPressedHOC'
 import Button from './Button.style'
+import boxShadow3d from '../utils/boxShadow3d'
+import shadeColor from '../utils/shadeColor'
+
+const StyledButton = Button.extend.attrs({
+  color: props => props.strict ? '#E74C3C' : '#00B248'
+})`
+  background-color: ${({color}) => color};
+  box-shadow: ${props => props.isPressed
+    ? boxShadow3d(3, shadeColor(props.color, -40))
+    : boxShadow3d(7, shadeColor(props.color, -40))
+  };
+`
 
 class StrictButton extends Component {
   state = {
-    buttonState: 0
+    buttonState: 1
   }
 
   render() {
     return (
-      <Button isPressed={this.props.isPressed} onClick={() => {
+      <StyledButton isPressed={this.props.isPressed} strict={this.state.buttonState} onClick={() => {
         this.props.onClick()
         this.setState(({buttonState}) => ({buttonState: +!buttonState}))
-      }}>{this.state.buttonState ? 'Strict' : 'Easy'}</Button>
+      }}>{this.state.buttonState ? 'Strict' : 'Easy'}</StyledButton>
     )
   }
 }

@@ -14,6 +14,6 @@ const Button = styled.button`
   box-shadow: ${props => props.isPressed
     ? boxShadow3d(3, shadeColor('#FFD500', -40))
     : boxShadow3d(7, shadeColor('#FFD500', -40))
-  }
+  };
 `
 export default Button
