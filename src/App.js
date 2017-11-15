@@ -26,7 +26,7 @@ class App extends Component {
     clickIsAllowed: false,
     shouldHandleMouseLeave: false,
     level: 1,
-    strict: true
+    strict: false
   }
 
   freq = [329.63,261.63,220,164.81]
@@ -156,7 +156,7 @@ class App extends Component {
       cardsToGlow: [],
       userCards: []
     }, () => {
-      setTimeout(() => this.handleStart([Math.floor(Math.random() * 4)]))
+      setTimeout(() => this.handleStart([Math.floor(Math.random() * 4)]), 500)
     })
   }
 

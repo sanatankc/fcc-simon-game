@@ -19,6 +19,7 @@ class StrictButton extends Component {
     return (
       <StyledButton
         isPressed={this.props.isPressed}
+        strict={this.props.strict}
         onClick={this.props.onClick}
       >{!this.props.strict ? 'Strict' : 'Easy'}</StyledButton>
     )
