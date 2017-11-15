@@ -26,6 +26,7 @@ class App extends Component {
     clickIsAllowed: false,
     shouldHandleMouseLeave: false,
     level: 1,
+    strict: true
   }
 
   freq = [329.63,261.63,220,164.81]
@@ -128,12 +129,15 @@ class App extends Component {
   }
 
   onLose() {
-    console.log(this)
-    this.setState({
-      userCards: []
-    }, () => {
-      setTimeout(() => this.handleStart([...this.state.gameState]), 500)
-    })
+    if (this.state.strict) {
+      this.reset()
+    } else {
+      this.setState({
+        userCards: []
+      }, () => {
+        setTimeout(() => this.handleStart([...this.state.gameState]), 500)
+      })
+    }
   }
 
   handleCardLeave(e) {
@@ -148,8 +152,9 @@ class App extends Component {
       gameState: [],
       cardsToGlow: [],
       userCards: []
+    }, () => {
+      setTimeout(() => this.handleStart([Math.floor(Math.random() * 4)]))
     })
-    this.handleStart([Math.floor(Math.random() * 4)])
   }
 
   render() {

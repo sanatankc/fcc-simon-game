@@ -5,7 +5,7 @@ import boxShadow3d from '../utils/boxShadow3d'
 import shadeColor from '../utils/shadeColor'
 
 const StyledButton = Button.extend.attrs({
-  color: props => props.strict ? '#E74C3C' : '#00B248'
+  color: props => !props.strict ? '#E74C3C' : '#00B248'
 })`
   background-color: ${({color}) => color};
   box-shadow: ${props => props.isPressed
@@ -16,15 +16,18 @@ const StyledButton = Button.extend.attrs({
 
 class StrictButton extends Component {
   state = {
-    buttonState: 1
+    strict: false
   }
 
   render() {
     return (
-      <StyledButton isPressed={this.props.isPressed} strict={this.state.buttonState} onClick={() => {
-        this.props.onClick()
-        this.setState(({buttonState}) => ({buttonState: +!buttonState}))
-      }}>{this.state.buttonState ? 'Strict' : 'Easy'}</StyledButton>
+      <StyledButton
+        isPressed={this.props.isPressed}
+        strict={this.state.strict}
+        onClick={() => {
+          this.props.onClick()
+          this.setState(({strict}) => ({strict: !strict}))
+      }}>{!this.state.strict ? 'Strict' : 'Easy'}</StyledButton>
     )
   }
 }
