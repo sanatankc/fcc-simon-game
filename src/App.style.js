@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
-
+import boxShadow3d from './utils/boxShadow3d'
+import shadeColor from './utils/shadeColor'
 
 const flexCenter = css`
   display: flex;
@@ -23,6 +24,7 @@ export const MainCircle = styled.div`
   max-height: 400px;
   background: #ECF0F1;
   border-radius: 50%;
+  box-shadow: ${boxShadow3d(13, '#c7d6da')}
 `
 
 export const Mask = styled.div`

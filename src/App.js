@@ -97,6 +97,7 @@ class App extends Component {
   }
 
   handleCardUp(e) {
+    e.preventDefault()
     if (this.state.clickIsAllowed) {
       const cardIndex = e.target.dataset.key
       this.sound.pause()
@@ -159,6 +160,7 @@ class App extends Component {
   }
 
   handleCardLeave(e) {
+    e.preventDefault()
     if (this.state.shouldHandleMouseLeave) {
       this.handleCardUp(e)
     }
@@ -191,6 +193,9 @@ class App extends Component {
                   onMouseDown={this.handleCardDown.bind(this)}
                   onMouseUp={this.handleCardUp.bind(this)}
                   onMouseLeave={this.handleCardLeave.bind(this)}
+                  onTouchStart={this.handleCardDown.bind(this)}
+                  onTouchEnd={this.handleCardUp.bind(this)}
+                  onTouchMove={this.handleCardLeave.bind(this)}
                 />
               )}
             </Mask>
