@@ -127,6 +127,7 @@ class App extends Component {
   onWin() {
     this.setState(prevState => ({
       userCards: [],
+      clickIsAllowed: false,
     }), () => {
       setTimeout(() => this.handleStart([...this.state.gameState, Math.floor(Math.random() * 4)]), 500)
     })
@@ -146,12 +147,15 @@ class App extends Component {
 
   losingAnimation(callback) {
     const allCardsGlow = [true, true, true, true]
-    this.setState({cardGlow: allCardsGlow})
-    this.sound.play(440)
+    this.setState({
+      cardGlow: allCardsGlow,
+      clickIsAllowed: false
+    })
+    this.sound.play(1040)
     setTimeout(() => {
       this.setState({cardGlow: cardsFalseState}, callback)
       this.sound.pause()
-    } ,1000)
+    } ,2000)
   }
 
   handleCardLeave(e) {
