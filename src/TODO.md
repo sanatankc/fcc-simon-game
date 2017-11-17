@@ -1,3 +1,3 @@
 # Todo
 
-* Implement losing animation
+* Fix events for phones
