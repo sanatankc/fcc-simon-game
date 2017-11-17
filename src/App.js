@@ -120,7 +120,7 @@ class App extends Component {
     } else if (allElementsEqual && !isSameLength) {
       console.log('Game is Still Running!!!')
     } else {
-      this.onLose()
+      this.losingAnimation(this.onLose)
     }
   }
 
@@ -142,6 +142,16 @@ class App extends Component {
         setTimeout(() => this.handleStart([...this.state.gameState]), 500)
       })
     }
+  }
+
+  losingAnimation(callback) {
+    const allCardsGlow = [true, true, true, true]
+    this.setState({cardGlow: allCardsGlow})
+    this.sound.play(440)
+    setTimeout(() => {
+      this.setState({cardGlow: cardsFalseState}, callback)
+      this.sound.pause()
+    } ,1000)
   }
 
   handleCardLeave(e) {
