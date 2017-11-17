@@ -168,7 +168,8 @@ class App extends Component {
     this.setState({
       gameState: [],
       cardsToGlow: [],
-      userCards: []
+      userCards: [],
+      clickIsAllowed: false,
     }, () => {
       setTimeout(() => this.handleStart([Math.floor(Math.random() * 4)]), 500)
     })
