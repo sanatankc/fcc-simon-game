@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import GitHubForkRibbon from 'react-github-fork-ribbon'
 import im from './utils/im'
 import Sound from './utils/sound'
 import StartButton from './components/StartButton'
@@ -216,6 +217,12 @@ class App extends Component {
             </ButtonsContainer>
           </ControlsContainer>
         </Container>
+        <GitHubForkRibbon
+          href="//www.github.com/sanatankumar/fcc-simon-game"
+          target="_blank"
+          position="right">
+          View Code On Github
+        </GitHubForkRibbon>
       </Main>
     )
   }
